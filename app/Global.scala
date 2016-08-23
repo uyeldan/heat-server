@@ -22,7 +22,7 @@
  * */
 
 import play.api._
-import fimk.SocketClient
+import heat.SocketClient
 
 object Global extends GlobalSettings {
   override def onStart(app: Application) {
