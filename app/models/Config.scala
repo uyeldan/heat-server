@@ -22,7 +22,6 @@
  * */
 package models
 
-import java.net.URLEncoder
 import play.api.Play.current
 
 object Config {
