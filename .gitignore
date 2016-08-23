@@ -9,9 +9,6 @@ RUNNING_PID
 .cache-tests
 .sbtserver
 /bin/
-/project/project
-/project/target
-/project/build.properties
 tmp
 dist
 .cache
