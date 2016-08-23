@@ -11,3 +11,4 @@ RUNNING_PID
 /bin/
 /project/project
 /project/target
+/project/build.properties
