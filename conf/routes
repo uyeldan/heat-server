@@ -26,6 +26,10 @@
 # Home page
 GET     /                                           controllers.Application.index
 
+GET     /dump                                       controllers.Application.dump
+
+GET     /assets/*file                               controllers.Assets.versioned(path="/public", file: Asset)
+
 GET     /socket/:publicKey/:timestamp/:signature    controllers.SocketController.socket(publicKey: String, timestamp: String, signature: String)
 
 POST    /payment/list                               controllers.PaymentController.list
