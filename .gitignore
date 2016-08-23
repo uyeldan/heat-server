@@ -12,3 +12,6 @@ RUNNING_PID
 /project/project
 /project/target
 /project/build.properties
+tmp
+dist
+.cache
