@@ -73,4 +73,25 @@ website, you'll be impressed. No doubt.
 
 # Getting started
 
-....
+(This is a draft, more details will follow)
+
+1. Clone the repo
+
+```
+git clone https://github.com/Heat-Ledger-Ltd/heat-server.git
+```
+
+2. Install Play! Framework tools
+
+See https://www.playframework.com/documentation/2.5.x/Installing
+
+3. Get heat-server (or anything compatible)
+
+4. Install and configure MySQL
+
+5. Start heat-server
+
+```
+activator compile
+activator run
+```
