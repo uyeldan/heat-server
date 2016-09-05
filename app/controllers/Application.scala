@@ -25,20 +25,18 @@ package controllers
 import play.api.mvc.Action
 import play.api.mvc.Controller
 import play.api.libs.json._
-import play.api.libs.functional.syntax._
 import models.ReplicatorPublicKey
 
 class Application extends Controller {
-  
+
   def index = Action {
     Ok(views.html.index("Your new application is ready."))
   }
-  
+
   def dump = Action {
     ReplicatorPublicKey.list match {
       case Some(keys) => Ok(Json.obj("keys" -> keys.map { key => ReplicatorPublicKey.toJson(key) }))
       case None => Ok(Json.obj("success" -> false))
     }
-  } 
-  
+  }
 }
