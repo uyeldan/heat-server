@@ -27,12 +27,12 @@ import heat.crypto.Crypto
 import java.security.SecureRandom
 
 object PlayCrypto {
-  
+
   case class EncryptedData(
     data: Array[Byte],
     nonce: Array[Byte]
   )
-  
+
   def signMessage(message: String, secretPhrase: String): Option[String] = {
     try {
       val messageBytes = Convert.toBytes(message);
@@ -42,30 +42,30 @@ object PlayCrypto {
       }
     }
     catch {
-      case e: NumberFormatException => None 
+      case e: NumberFormatException => None
     }
     None
   }
-  
+
   def publicKeyToAccountId(publicKey: Array[Byte]): Long = {
     val publicKeyHash = Crypto.sha256().digest(publicKey);
-    Convert.fullHashToId(publicKeyHash);    
+    Convert.fullHashToId(publicKeyHash);
   }
-  
+
   def secretPhraseToAccountId(secretPhrase: String): Long = {
     publicKeyToAccountId(Crypto.getPublicKey(secretPhrase))
   }
-  
+
   def secretPhraseToPublicKey(secretPhrase: String): Array[Byte] = {
     Crypto.getPublicKey(secretPhrase)
   }
-  
+
   def encryptToRecipient(publicKey: Array[Byte],secretPhrase: String, message: Array[Byte]): EncryptedData = {
     val privateKey = Crypto.getPrivateKey(secretPhrase)
     val nonce = new Array[Byte](32)
     val secureRandom = new SecureRandom()
     secureRandom.nextBytes(nonce);
     val data = Crypto.aesEncrypt(message, privateKey, publicKey, nonce);
-    EncryptedData(data, nonce)   
-  }  
+    EncryptedData(data, nonce)
+  }
 }
