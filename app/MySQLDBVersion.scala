@@ -3,7 +3,7 @@
  * Copyright (c) 2016 Heat Ledger Ltd.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
- * this software and associated documentation files (the "Software"), to deal in
+ * this software and associated documentation files (the 'Software'), to deal in
  * the Software without restriction, including without limitation the rights to
  * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
  * the Software, and to permit persons to whom the Software is furnished to do so,
@@ -12,7 +12,7 @@
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
@@ -21,10 +21,15 @@
  * SOFTWARE.
  * */
 
+import models.EthereumParticipants
+import models.BitcoinParticipants
+import models.FimkParticipants
+import models.NxtParticipants
+import models.BitcoinAddresses
+import models.EthereumAddresses
+
 object MySQLDBVersion extends DBVersion {
-  
-  /* All timestamps use HEAT epoch timestamps. */
-  
+
   override def update(nextUpdate: Int) = {
     val updates = List(
       """
@@ -38,14 +43,22 @@ object MySQLDBVersion extends DBVersion {
         nonce BINARY(32) NOT NULL,
         recipient_id BIGINT NOT NULL,
         sender_id BIGINT NOT NULL,
-        timestamp INT NOT NULL, 
+        timestamp INT NOT NULL,
         reply_to BIGINT NOT NULL DEFAULT 0,
         PRIMARY KEY (id))
       """,
       "CREATE INDEX message_timestamp_idx ON message (timestamp)",
       "CREATE INDEX message_sender_id_idx ON message (sender_id)",
       "CREATE INDEX message_recipient_id_idx ON message (recipient_id)",
-      "CREATE INDEX message_reply_to_idx ON message (reply_to)"
+      "CREATE INDEX message_reply_to_idx ON message (reply_to)",
+      EthereumParticipants.mysqlSchema,
+      BitcoinParticipants.mysqlSchema1,
+      BitcoinParticipants.mysqlSchema2,
+      BitcoinParticipants.mysqlSchema3,
+      FimkParticipants.mysqlSchema,
+      NxtParticipants.mysqlSchema,
+      BitcoinAddresses.mysqlSchema,
+      EthereumAddresses.mysqlSchema
     )
     updates.slice(nextUpdate, updates.size).foreach(apply(_))
   }
