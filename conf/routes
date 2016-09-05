@@ -69,3 +69,12 @@ POST    /search/identifier                          controllers.SearchController
 POST    /search/publickey                           controllers.SearchController.publickey
 
 POST    /search/account                             controllers.SearchController.account
+
+POST    /register                                   controllers.RegisterController.register
+
+# ##############################################################################
+# ICO Redemption Process
+# ##############################################################################
+
+POST    /icopayment/count                           controllers.IcoClaimController.icoPaymentCount
+
