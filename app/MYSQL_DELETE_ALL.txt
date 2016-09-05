@@ -1,0 +1,24 @@
+# Clear all tables
+USE heat_replicate;
+SET FOREIGN_KEY_CHECKS = 0;
+SET GROUP_CONCAT_MAX_LEN=32768;
+SET @tables = NULL;
+SELECT GROUP_CONCAT('`', table_name, '`') INTO @tables
+  FROM information_schema.tables
+  WHERE table_schema = (SELECT DATABASE());
+SELECT IFNULL(@tables,'dummy') INTO @tables;
+SET @tables = CONCAT('DROP TABLE IF EXISTS ', @tables);
+PREPARE stmt FROM @tables;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+SET FOREIGN_KEY_CHECKS = 1;
+
+# Create the database
+CREATE DATABASE heat_replicate;
+USE heat_replicate;
+CREATE USER sqluser IDENTIFIED BY '[SELECT PASSWORD FOR sqluser]';
+GRANT USAGE on *.* TO sqluser@localhost IDENTIFIED BY '[SELECT PASSWORD FOR sqluser]';
+GRANT ALL PRIVILEGES ON heat_replicate.* to sqluser@localhost;
+
+# Remove the fimk_replicate database
+DROP DATABASE IF EXISTS heat_replicate
