@@ -79,6 +79,16 @@ public final class Convert {
         return String.valueOf(chars);
     }
 
+    public static boolean isHex(String str) {
+        try {
+            int val = Integer.parseInt(str,16);
+        }
+        catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
+    
     public static long parseUnsignedLong(String number) {
         if (number == null) {
             return 0;
@@ -99,12 +109,13 @@ public final class Convert {
     }
 
     public static long parseAccountId(String account) {
+        System.out.println("parseAccountId account="+account);
         if (account == null || (account = account.trim()).isEmpty()) {
             return 0;
         }
         account = account.toUpperCase();
         if (account.startsWith("HEAT-")) {
-            return Crypto.rsDecode(account.substring(4));
+            return Crypto.rsDecode(account.substring(5));
         } else {
             return Long.parseUnsignedLong(account);
         }
