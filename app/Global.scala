@@ -23,12 +23,30 @@
 
 import play.api._
 import heat.SocketClient
+import play.api.libs.ws.WSClient
+import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import models.EthereumParticipants
+import models.BitcoinParticipants
+import models.FimkParticipants
+import models.NxtParticipants
+import models.EthereumAddresses
+import models.BitcoinAddresses
+import play.Logger
 
 object Global extends GlobalSettings {
+
   override def onStart(app: Application) {
     Logger.info("Application has started")
 
     MySQLDBVersion.init
     //SocketClient.init
+
+    val ws = app.injector.instanceOf[WSClient];
+    EthereumParticipants.init(ws)
+    BitcoinParticipants.init(ws)
+    FimkParticipants.init(ws)
+    NxtParticipants.init(ws)
+    EthereumAddresses.init
+    BitcoinAddresses.init
   }  
 }
