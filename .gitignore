@@ -12,3 +12,4 @@ RUNNING_PID
 tmp
 dist
 .cache
+app/MYSQL_DELETE_ALL.txt 
