@@ -23,9 +23,12 @@
 package models
 
 import java.sql.PreparedStatement
+import java.sql.Connection
+import java.sql.SQLException
+import play.Logger
 
 object DBUtils {
-  
+
   def limitsClause(from: Int, to: Int): String = {
     val limit = if (to >=0 && to >= from && to < Integer.MAX_VALUE)
       to - from + 1
@@ -36,7 +39,7 @@ object DBUtils {
     else if (from > 0)" LIMIT NULL OFFSET ? "
     else ""
   }
-  
+
   def setLimits(indexx: Int, pstmt: PreparedStatement, from: Int, to: Int): Int = {
     val limit = if (to >=0 && to >= from && to < Integer.MAX_VALUE)
       to - from + 1
@@ -52,5 +55,22 @@ object DBUtils {
       index += 1
     }
     index;
-  }  
+  }
+
+  def getRowCount(conn: Connection, tableName: String) : Int = {
+    try {
+      val pstmt = conn.prepareStatement(s"SELECT COUNT(*) FROM $tableName")
+      val result = pstmt.executeQuery()
+      if (result.next()) {
+        val output = result.getInt(1)
+        Logger.info(s"$tableName count = "+output)
+        return output
+      }
+    } catch {
+      case e:SQLException => Logger.error("DBUtils.getRowCount error", e)
+      case e:Exception => Logger.error("DBUtils.getRowCount error", e)
+    }
+    Logger.info(s"$tableName count = ZERO")
+    0
+  }
 }
