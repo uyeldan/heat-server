@@ -1,0 +1,120 @@
+# Intro
+
+All tables live in the `heat_replicate` database. To access the mysql console
+from the commandline do this.
+
+    $ mysql -h 127.0.0.1 -p
+    $ ENTER PASSWORD
+    $ mysql > USE heat_replicate;
+    $ mysql > SELECT COUNT(*) FROM bitcoin_ico_transaction;
+
+# Bitcoin
+
+Sources are available online, back-ups are stored in the ico_json folder.
+
+    - https://blockchain.info/rawaddr/1HEATQCfWJKPWb8612K2oGR7EE6XPqNYHj?format=json&limit=50&offset=0
+    - https://blockchain.info/rawaddr/1HEATQCfWJKPWb8612K2oGR7EE6XPqNYHj?format=json&limit=50&offset=50
+    - https://blockchain.info/rawaddr/1HEATQCfWJKPWb8612K2oGR7EE6XPqNYHj?format=json&limit=50&offset=100
+    - https://blockchain.info/rawaddr/1HEATQCfWJKPWb8612K2oGR7EE6XPqNYHj?format=json&limit=50&offset=150
+    - https://blockchain.info/rawaddr/1HEATQCfWJKPWb8612K2oGR7EE6XPqNYHj?format=json&limit=50&offset=200
+
+MySQL tables with parsed data.
+
+    CREATE TABLE IF NOT EXISTS bitcoin_ico_transaction (
+      time BIGINT NOT NULL,
+      tx_index BIGINT NOT NULL,
+      hash VARCHAR(66) NOT NULL,
+      PRIMARY KEY (tx_index))
+
+    CREATE TABLE IF NOT EXISTS bitcoin_ico_input (
+      tx_index BIGINT NOT NULL,
+      value DECIMAL(40) NOT NULL,
+      addr VARCHAR(66) NOT NULL,
+      PRIMARY KEY (tx_index,value,addr))
+
+    CREATE TABLE IF NOT EXISTS bitcoin_ico_output (
+      tx_index BIGINT NOT NULL,
+      value DECIMAL(40) NOT NULL,
+      addr VARCHAR(66) NOT NULL,
+      PRIMARY KEY (tx_index,value,addr))
+
+Explained:
+
+    Each transaction lives in the `bitcoin_ico_transaction` table. Each
+    transaction input lives is `bitcoin_ico_input`, each output lives in
+    `bitcoin_ico_output`.
+    To determine what inputs and outputs belong to which transaction you'll
+    look at the unique `tx_index` value.
+    The `value` is the amount of BTC transferred, the units are SATOSHI.
+    The `time` is the time property as returned from the https://blockchain.info API.
+
+# Ethereum
+
+Sources are available online, back-ups are stored in the ico_json folder.
+
+    - https://etherchain.org/api/account/0x4ea79a8ff56d39f5cb045642d6ce9cb0653e5e47/tx/0
+    - https://etherchain.org/api/account/0x4ea79a8ff56d39f5cb045642d6ce9cb0653e5e47/tx/50
+    - https://etherchain.org/api/account/0x4ea79a8ff56d39f5cb045642d6ce9cb0653e5e47/tx/100
+
+MySQL tables with parsed data.
+
+    CREATE TABLE IF NOT EXISTS ethereum_ico_payment (
+      time VARCHAR(66) NOT NULL,
+      sender VARCHAR(200) NOT NULL,
+      amount DECIMAL(40) NOT NULL,
+      hash VARCHAR(66) NOT NULL,
+      PRIMARY KEY (hash));
+
+Explained:
+
+    Each transaction lives in the `ethereum_ico_payment` table. The units in
+    the amount field are WEI. Look here for a tool to convert between
+    WEI and ETHER http://ether.fund/tool/converter.
+    The `time` is the time property as returned from the https://etherchain.org API.
+
+# FIMK
+
+Sources are available online, back-ups are stored in the ico_json folder.
+
+    - https://cloud.mofowallet.org:7886/nxt?requestType=getAccountTransactions&account=FIM-G9TG-6AWU-MKP7-38A6D&firstIndex=0
+    - https://cloud.mofowallet.org:7886/nxt?requestType=getAccountTransactions&account=FIM-G9TG-6AWU-MKP7-38A6D&firstIndex=100
+
+MySQL tables with parsed data.
+
+    CREATE TABLE IF NOT EXISTS fimk_ico_payment (
+      timestamp BIGINT NOT NULL,
+      amount BIGINT NOT NULL,
+      recipient VARCHAR(66) NOT NULL,
+      sender VARCHAR(66) NOT NULL,
+      transaction VARCHAR(66) NOT NULL,
+      PRIMARY KEY (transaction))
+
+Explained:
+
+    Each transaction lives in the `fimk_ico_payment` table. Both sender and
+    recipient are in RS format. The timestamp is NXT epoch format.
+    The amount field holds the transacted amount in NQT units.
+    The `timestamp` is the number of seconds since FIMK EPOCH.
+
+# NXT
+
+Sources are available online, back-ups are stored in the ico_json folder.
+
+    - https://cloud.mofowallet.org:9981/nxt?requestType=getBlockchainTransactions&account=NXT-VCVC-CN3H-WARG-HKJYX&firstIndex=0
+
+MySQL tables with parsed data.
+
+    CREATE TABLE IF NOT EXISTS nxt_ico_payment (
+      timestamp BIGINT NOT NULL,
+      amount BIGINT NOT NULL,
+      recipient VARCHAR(66) NOT NULL,
+      sender VARCHAR(66) NOT NULL,
+      transaction VARCHAR(66) NOT NULL,
+      PRIMARY KEY (transaction))
+
+Explained:
+
+    Each transaction lives in the `nxt_ico_payment` table. Both sender and
+    recipient are in RS format. The timestamp is NXT epoch format.
+    The amount field holds the transacted amount in NQT units.
+    The `timestamp` is the number of seconds since NXT EPOCH.
