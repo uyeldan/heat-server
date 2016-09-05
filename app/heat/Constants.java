@@ -30,7 +30,7 @@ public final class Constants {
     public static final boolean isTestnet = true;
     
     public static final long ONE_NXT = 100000000;
-    public static final long MAX_BALANCE_NXT = isTestnet ? 999965465 : 999455619;
+    public static final long MAX_BALANCE_NXT = 2500000000000000L;
     public static final long MAX_BALANCE_NQT = MAX_BALANCE_NXT * ONE_NXT;
     
     public static final long EPOCH_BEGINNING;
@@ -45,5 +45,4 @@ public final class Constants {
         calendar.set(Calendar.MILLISECOND, 0);
         EPOCH_BEGINNING = calendar.getTimeInMillis();
     }
-
 }
